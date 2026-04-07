@@ -7,6 +7,7 @@
 #define STACK_IS_EMPTY 4
 #define STACK_NOT_INIT 5
 #define TREE_NOT_INIT 6
+#define TREE_IS_EMPTY
 #define INCORRECT_VALUE_ERROR 7
 #define OPENING_FILE_ERROR -1
 #define VALUE_ERROR -2

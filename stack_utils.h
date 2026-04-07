@@ -20,7 +20,7 @@ typedef struct OperandStack
 int init_operand_stack(OperandStack *stack);
 int insert_operand_stack(OperandStack *stack, TreeNode *operand);
 int pop_operand_stack(OperandStack *stack, TreeNode **pop_operand);
-int pick_operand_stack(OperandStack *stack, TreeNode **pick_operand);
+int peek_operand_stack(OperandStack *stack, TreeNode **pick_operand);
 void destroy_operand_stack(OperandStack *stack);
 
 
@@ -39,7 +39,7 @@ typedef struct OperationStack
 int init_operation_stack(OperationStack *stack);
 int insert_operation_stack(OperationStack *stack, char operation);
 int pop_operation_stack(OperationStack *stack, char *operation);
-int pick_operation_stack(OperationStack *stack, char *operation);
+int peek_operation_stack(OperationStack *stack, char *operation);
 void destroy_operation_stack(OperationStack *stack);
 
 

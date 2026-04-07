@@ -23,7 +23,7 @@ typedef struct Tree
 
 int init_tree(Tree *tree);
 int create_operand_tree_node(TreeNode **node, int operand);
-int create_operation_tree_node(char operation);
+int create_operation_tree_node(TreeNode **node, char operation, TreeNode **left_operand, TreeNode **right_operand);
 int transformation_tree(Tree *tree);
 void destroy_tree(Tree *tree);
 

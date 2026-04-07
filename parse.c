@@ -26,6 +26,23 @@ int is_operation(char symbol)
 }
 
 
+int operation_priority(char symbol)
+{
+    switch (symbol)
+    {
+    case '+':
+    case '-':
+        return 0;
+    case '*':
+    case '/':
+    case '%':
+        return 1;
+    case '^':
+        return 2;
+    }
+}
+
+
 int parse(Tree *tree)
 {
     OperationStack operations;
@@ -50,8 +67,16 @@ int parse(Tree *tree)
             int operand = atoi(number);
             nb = number;
             TreeNode *node;
-            create_operand_tree_node(node, operand);
-            insert_operand_stack(&operands, node);
+            if (create_operand_tree_node(node, operand))
+            {
+                return ALLOCATION_MEMORY_ERROR;
+            }
+            if (insert_operand_stack(&operands, node))
+            {
+                free(node);
+                return ALLOCATION_MEMORY_ERROR;
+            }
+            continue;
         }
         if (c == '\n' || c == 'EOF')
         {
@@ -61,9 +86,74 @@ int parse(Tree *tree)
         {
             continue;
         }
+        if (c == '(')
+        {
+            if (insert_operation_stack(&operations, c))
+            {
+                return ALLOCATION_MEMORY_ERROR;
+            }
+        }
         if (is_operation(c))
         {
-            insert_operation_stack(&operations, c);
+            char operation;
+            while (!peek_operation_stack(&operations, &operation) && (operation_priority(operation) <= operation_priority(c)))
+            {
+                TreeNode *right;
+                TreeNode *left;
+                if (pop_operand_stack(&operands, &right) || pop_operand_stack(&operands, &left)
+                    || pop_operation_stack(&operations, &operation))
+                {
+                    return STACK_IS_EMPTY;
+                }
+                TreeNode *new_node;
+                if (create_operation_tree_node(&new_node, operation, &left, &right))
+                {
+                    free(right);
+                    free(left);
+                    return ALLOCATION_MEMORY_ERROR;
+                }
+                if (insert_operand_stack(&operands, new_node))
+                {
+                    free(right);
+                    free(left);
+                    return ALLOCATION_MEMORY_ERROR;
+                }
+            }
+            if (insert_operation_stack(&operations, c))
+            {
+                return ALLOCATION_MEMORY_ERROR;
+            }
+        }
+        if (c == ')')
+        {
+            char operation;
+            while (!peek_operation_stack(&operations, &operation) && operation != '(')
+            {
+                TreeNode *right;
+                TreeNode *left;
+                if (pop_operand_stack(&operands, &right) || pop_operand_stack(&operands, &left)
+                    || pop_operation_stack(&operations, &operation))
+                {
+                    return STACK_IS_EMPTY;
+                }
+                TreeNode *new_node;
+                if (create_operation_tree_node(&new_node, operation, &left, &right))
+                {
+                    free(right);
+                    free(left);
+                    return ALLOCATION_MEMORY_ERROR;
+                }
+                if (insert_operand_stack(&operands, new_node))
+                {
+                    free(right);
+                    free(left);
+                    return ALLOCATION_MEMORY_ERROR;
+                }
+            }
+            if (pop_operation_stack(&operations, &operation))
+            {
+                return INCORRECT_VALUE_ERROR;
+            }
         }
         if (isalnum(c))
         {

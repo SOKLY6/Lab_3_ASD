@@ -51,7 +51,7 @@ int pop_operand_stack(OperandStack *stack, TreeNode **pop_operand)
 }
 
 
-int pick_operand_stack(OperandStack *stack, TreeNode **pick_operand)
+int peek_operand_stack(OperandStack *stack, TreeNode **pick_operand)
 {
     if (stack == NULL) 
     {
@@ -131,7 +131,7 @@ int pop_operation_stack(OperationStack *stack, char *operation)
 }
 
 
-int pick_operation_stack(OperationStack *stack, char *operation)
+int peek_operation_stack(OperationStack *stack, char *operation)
 {
     if (stack == NULL) 
     {
