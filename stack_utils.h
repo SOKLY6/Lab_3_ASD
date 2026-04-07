@@ -21,6 +21,7 @@ int init_operand_stack(OperandStack *stack);
 int insert_operand_stack(OperandStack *stack, TreeNode *operand);
 int pop_operand_stack(OperandStack *stack, TreeNode **pop_operand);
 int peek_operand_stack(OperandStack *stack, TreeNode **pick_operand);
+int is_empty_operand_stack(OperandStack *stack);
 void destroy_operand_stack(OperandStack *stack);
 
 
@@ -40,6 +41,7 @@ int init_operation_stack(OperationStack *stack);
 int insert_operation_stack(OperationStack *stack, char operation);
 int pop_operation_stack(OperationStack *stack, char *operation);
 int peek_operation_stack(OperationStack *stack, char *operation);
+int is_empty_operation_stack(OperationStack *stack);
 void destroy_operation_stack(OperationStack *stack);
 
 

@@ -66,6 +66,16 @@ int peek_operand_stack(OperandStack *stack, TreeNode **pick_operand)
 }
 
 
+int is_empty_operand_stack(OperandStack *stack)
+{
+    if (stack == NULL) 
+    {
+        return STACK_NOT_INIT;
+    }
+    return stack->head == NULL;
+}
+
+
 void destroy_operand_stack(OperandStack *stack)
 {
     if (stack == NULL) 
@@ -143,6 +153,16 @@ int peek_operation_stack(OperationStack *stack, char *operation)
     }
     *operation = stack->head->operation;
     return 0;
+}
+
+
+int is_empty_operation_stack(OperationStack *stack)
+{
+    if (stack == NULL) 
+    {
+        return STACK_NOT_INIT;
+    }
+    return stack->head == NULL;
 }
 
 

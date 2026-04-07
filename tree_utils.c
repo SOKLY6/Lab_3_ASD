@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "tree_utils.h"
@@ -50,7 +51,7 @@ int create_operation_tree_node(TreeNode **node, char operation,
 }
 
 
-void transformation_root(TreeNode *root, int minus_flag)
+static void transformation_root(TreeNode *root, int minus_flag)
 {
     if (root->left == NULL && root->right == NULL)
     {
@@ -64,10 +65,20 @@ void transformation_root(TreeNode *root, int minus_flag)
     switch (operation)
     {
     case '-':
-        minus_flag = !minus_flag;
+        root->value.operation = '+';
+        transformation_root(root->left, minus_flag);
+        transformation_root(root->right, !minus_flag);
         break;
     case '+':
-        
+        transformation_root(root->left, minus_flag);
+        transformation_root(root->right, minus_flag);
+        break;
+    case '*':
+    case '/':
+    case '%':
+        transformation_root(root->left, minus_flag);
+        transformation_root(root->right, 0);
+        break;
     default:
         break;
     }
@@ -89,7 +100,27 @@ int transformation_tree(Tree *tree)
 }
 
 
-void destroy_root(TreeNode *root) {
+void print_tree(const TreeNode *root, int level)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    print_tree(root->right, level + 1);
+    printf("%*s", level * 4, "");
+    if (root->left == NULL && root->right == NULL)
+    {
+        printf("%d\n", root->value.operand);
+    }
+    else
+    {
+        printf("%c\n", root->value.operation);
+    }
+    print_tree(root->left, level + 1);
+}
+
+
+static void destroy_root(TreeNode *root) {
     if (root == NULL) {
         return;
     }
