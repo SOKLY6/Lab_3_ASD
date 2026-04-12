@@ -191,6 +191,8 @@ int parse(Tree *tree)
             int res = push_number_operand(&operands, number, &nb);
             if (res)
             {
+                destroy_operation_stack(&operations);
+                destroy_operand_stack(&operands);
                 return res;
             }
             number_key = !number_key;
@@ -207,6 +209,8 @@ int parse(Tree *tree)
         {
             if (insert_operation_stack(&operations, c))
             {
+                destroy_operation_stack(&operations);
+                destroy_operand_stack(&operands);
                 return ALLOCATION_MEMORY_ERROR;
             }
             continue;
@@ -216,6 +220,8 @@ int parse(Tree *tree)
             int res = process_operation(&operands, &operations, c);
             if (res)
             {
+                destroy_operation_stack(&operations);
+                destroy_operand_stack(&operands);
                 return res;
             }
             continue;
@@ -225,6 +231,8 @@ int parse(Tree *tree)
             int res = process_closing_bracket(&operands, &operations);
             if (res)
             {
+                destroy_operation_stack(&operations);
+                destroy_operand_stack(&operands);
                 return res;
             }
             continue;
@@ -236,8 +244,16 @@ int parse(Tree *tree)
             number_key = 1;
             continue;
         }
+        destroy_operation_stack(&operations);
+        destroy_operand_stack(&operands);
         return INCORRECT_VALUE_ERROR;
     }
 
-    return finish_parse(tree, &operands, &operations, number_key, number, &nb);
+    int res = finish_parse(tree, &operands, &operations, number_key, number, &nb);
+    if (res)
+    {
+        destroy_operation_stack(&operations);
+        destroy_operand_stack(&operands);
+    }
+    return res;
 }
